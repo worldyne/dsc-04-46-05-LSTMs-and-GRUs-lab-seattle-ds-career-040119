@@ -284,6 +284,8 @@ gru_model.summary()
     _________________________________________________________________
     
 
+Finally, train our GRU model using the same parameters as we did for our LSTM model.
+
 
 ```python
 gru_model.fit(X_t, labels, epochs=2, batch_size=32, validation_split=0.1)
