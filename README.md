@@ -35,23 +35,6 @@ In the cell below, import the following items:
 * `numpy`, `matplotlib`, and `pandas`. Set the standard alias for each.
 * Also set matplotlib visualizations to appear inline, and use numpy to set a random seed of `0`.
 
-
-```python
-from sklearn.datasets import fetch_20newsgroups
-import keras
-from keras.layers import LSTM, GRU, Dense, GlobalMaxPool1D, Embedding, Dropout
-from keras.preprocessing import text, sequence
-from keras.models import Sequential
-import numpy as np
-import matplotlib.pyplot as plt
-%matplotlib inline
-np.random.seed(0)
-import pandas as pd
-```
-
-    Using TensorFlow backend.
-    
-
 ### Importing and Preprocessing Our Text Data
 
 Since we'll be working with a text dataset, we'll need to do a few things to get it into a format where our LSTM and GRU networks can work with it. Specifically, we'll need to:
@@ -66,7 +49,7 @@ Let's start by loading in our data. In the cell below, call `fetch_20newsgroups(
 
 
 ```python
-newsgroups = fetch_20newsgroups()
+newsgroups = None
 ```
 
 Now, let's split off our data and labels, which are currently stored in our `newgroups` object's `.data` and `.target` attributes, respectively.  
@@ -75,8 +58,8 @@ In the cell below, store the `data` and the `target` in the appropriate variable
 
 
 ```python
-data = newsgroups.data
-labels = newsgroups.target
+data = None
+labels = None
 ```
 
 Next, we'll need to convert our data to a one-hot encoded format. Keras has a utility function that can easily do this for us called `to_categorical()`, which can be found in `keras.utils`.
@@ -85,7 +68,7 @@ In the cell below, call the `to_categorical()` function and pass in `labels`, as
 
 
 ```python
-labels = keras.utils.to_categorical(labels, 20)
+labels = None
 ```
 
 #### Creating Sequences From Text
@@ -103,10 +86,10 @@ In the cell below:
 
 
 ```python
-tokenizer = text.Tokenizer(num_words=20000)
-tokenizer.fit_on_texts(list(data))
-list_tokenized_train = tokenizer.texts_to_sequences(data)
-X_t = sequence.pad_sequences(list_tokenized_train, maxlen=100)
+tokenizer = None
+
+list_tokenized_train = None
+X_t = None
 ```
 
 Great! We've now finished preprocessing our data, and we're ready to build, compile, and train our models!
@@ -135,14 +118,8 @@ In the cell below, create our `LSTM` model.
 ```python
 # LSTM Model
 
-lstm_model = Sequential()
-lstm_model.add(Embedding(20000, 128))
-lstm_model.add(LSTM(50, return_sequences=True))
-lstm_model.add(GlobalMaxPool1D())
-lstm_model.add(Dropout(0.5))
-lstm_model.add(Dense(50, activation='relu'))
-lstm_model.add(Dropout(0.5))
-lstm_model.add(Dense(20, activation='softmax'))
+lstm_model = None
+
 ```
 
 #### Compilation Parameters
@@ -155,42 +132,9 @@ In the cell below, call our model's `.compile()` method and pass in the followin
 * `optimizer='adam'`
 * `metrics=['accuracy']`
 
-
-```python
-lstm_model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-```
-
 #### Inspecting Our Compiled Model
 
 Before we train our model, let's take a look at what it looks like, and see how many trainable parameters it has. In the cell below, call our model's `.summary()` method to inspect it. 
-
-
-```python
-lstm_model.summary()
-```
-
-    _________________________________________________________________
-    Layer (type)                 Output Shape              Param #   
-    =================================================================
-    embedding_1 (Embedding)      (None, None, 128)         2560000   
-    _________________________________________________________________
-    lstm_1 (LSTM)                (None, None, 50)          35800     
-    _________________________________________________________________
-    global_max_pooling1d_1 (Glob (None, 50)                0         
-    _________________________________________________________________
-    dropout_1 (Dropout)          (None, 50)                0         
-    _________________________________________________________________
-    dense_1 (Dense)              (None, 50)                2550      
-    _________________________________________________________________
-    dropout_2 (Dropout)          (None, 50)                0         
-    _________________________________________________________________
-    dense_2 (Dense)              (None, 20)                1020      
-    =================================================================
-    Total params: 2,599,370
-    Trainable params: 2,599,370
-    Non-trainable params: 0
-    _________________________________________________________________
-    
 
 Just under 2.6 million trainable parameters--that's a pretty decent-sized model!
 
@@ -208,25 +152,6 @@ In the cell below, call our model's `.train()` method and pass in the following 
 
 **_NOTE:_** This will take a few minutes per epoch to train!
 
-
-```python
-lstm_model.fit(X_t, labels, epochs=2, batch_size=32, validation_split=0.1)
-```
-
-    Train on 10182 samples, validate on 1132 samples
-    Epoch 1/2
-    10182/10182 [==============================] - 52s 5ms/step - loss: 2.9184 - acc: 0.0855 - val_loss: 2.5967 - val_acc: 0.1749
-    Epoch 2/2
-    10182/10182 [==============================] - 50s 5ms/step - loss: 2.2823 - acc: 0.2511 - val_loss: 1.7920 - val_acc: 0.5141
-    
-
-
-
-
-    <keras.callbacks.History at 0x23438ce46a0>
-
-
-
 ### Building Our GRU Model
 
 Now that we have a benchmark for how an LSTM model performs, let's build the exact same model, but with `GRU()` cells instead of `LSTM()` cells!
@@ -237,71 +162,15 @@ In the cell below, recreate the network we did above, but with `GRU()` neurons i
 ```python
 # GRU Model
 
-gru_model = Sequential()
-gru_model.add(Embedding(20000, 128))
-gru_model.add(GRU(50, return_sequences=True))
-gru_model.add(GlobalMaxPool1D())
-gru_model.add(Dropout(0.5))
-gru_model.add(Dense(50, activation='relu'))
-gru_model.add(Dropout(0.5))
-gru_model.add(Dense(20, activation='softmax'))
+gru_model = None
+
 ```
 
 Now, compile the model with the same parameters we did for the first network.
 
-
-```python
-gru_model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-```
-
 Now, let's look at a `.summary()` of our GRU model, and see if it has more or less total trainable parameters than our LSTM model. 
 
-
-```python
-gru_model.summary()
-```
-
-    _________________________________________________________________
-    Layer (type)                 Output Shape              Param #   
-    =================================================================
-    embedding_2 (Embedding)      (None, None, 128)         2560000   
-    _________________________________________________________________
-    gru_1 (GRU)                  (None, None, 50)          26850     
-    _________________________________________________________________
-    global_max_pooling1d_2 (Glob (None, 50)                0         
-    _________________________________________________________________
-    dropout_3 (Dropout)          (None, 50)                0         
-    _________________________________________________________________
-    dense_3 (Dense)              (None, 50)                2550      
-    _________________________________________________________________
-    dropout_4 (Dropout)          (None, 50)                0         
-    _________________________________________________________________
-    dense_4 (Dense)              (None, 20)                1020      
-    =================================================================
-    Total params: 2,590,420
-    Trainable params: 2,590,420
-    Non-trainable params: 0
-    _________________________________________________________________
-    
-
-
-```python
-gru_model.fit(X_t, labels, epochs=2, batch_size=32, validation_split=0.1)
-```
-
-    Train on 10182 samples, validate on 1132 samples
-    Epoch 1/2
-    10182/10182 [==============================] - 41s 4ms/step - loss: 2.9062 - acc: 0.1079 - val_loss: 2.5377 - val_acc: 0.3207
-    Epoch 2/2
-    10182/10182 [==============================] - 40s 4ms/step - loss: 2.2111 - acc: 0.3149 - val_loss: 1.7253 - val_acc: 0.5256
-    
-
-
-
-
-    <keras.callbacks.History at 0x23438c236a0>
-
-
+Finally, train our GRU model using the same parameters as we did for our LSTM model. 
 
 There we have it! In this particular case, GRUs strongly outperformed LSTMs in the first epoch, but the gap quickly leveled out between them by the end of epoch 2. When comparing LSTMs and GRUs for a given task, this isn't always the case--there are certainly times where LSTMs will outperform GRUs. However, overall, GRUs seem to have a slight advantage over LSTMs. The interesting thing about this is that researchers don't yet know _why_ GRUs tend to slightly outperform LSTMs, especially when GRU cells are a bit simpler than LSTM cells. This is an ongoing area of cutting-edge research in the field of Deep Learning--maybe someday, you'll be the one to solve this mystery!
 
