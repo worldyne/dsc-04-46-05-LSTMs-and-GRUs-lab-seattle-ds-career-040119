@@ -13,7 +13,7 @@ You will be able to:
 * Demonstrate an understanding of the basic architecture and function of a Long Short Term Memory cell
 * Demonstrate an understanding of the basic architecture and function of a Gated Recurrent Unit
 
-### Getting Started
+## Getting Started
 
 In this lab, we'll see a basic example of how we can use LSTMs and GRU cells to build a Recurrent Neural Network for text classification on the _Newsgroups Dataset_ that is included with scikit-learn. The goal of this lab build 2 nearly identical models so that we can benchmark performances for both LSTMs and GRUs and compare them against one another. 
 
@@ -50,9 +50,9 @@ import pandas as pd
 ```
 
     Using TensorFlow backend.
-    
 
-### Importing and Preprocessing Our Text Data
+
+## Importing and Preprocessing Our Text Data
 
 Since we'll be working with a text dataset, we'll need to do a few things to get it into a format where our LSTM and GRU networks can work with it. Specifically, we'll need to:
 
@@ -88,7 +88,7 @@ In the cell below, call the `to_categorical()` function and pass in `labels`, as
 labels = keras.utils.to_categorical(labels, 20)
 ```
 
-#### Creating Sequences From Text
+### Creating Sequences From Text
 
 By now, you've seen this code before. Anytime we work with text data for deep learning, you can expect to see the following preprocessing pattern:
 
@@ -111,11 +111,11 @@ X_t = sequence.pad_sequences(list_tokenized_train, maxlen=100)
 
 Great! We've now finished preprocessing our data, and we're ready to build, compile, and train our models!
 
-### Creating Our Models
+## Creating Our Models
 
 Now, to the fun part--creating, and training to similar LSTM and GRU networks, and comparing their performance and runtimes. 
 
-#### Architectures
+### Architectures
 
 Both of our models will stick to the following architecture:
 
@@ -145,7 +145,7 @@ lstm_model.add(Dropout(0.5))
 lstm_model.add(Dense(20, activation='softmax'))
 ```
 
-#### Compilation Parameters
+### Compilation Parameters
 
 Now that we've built our model, we still need to compile it. 
 
@@ -160,7 +160,7 @@ In the cell below, call our model's `.compile()` method and pass in the followin
 lstm_model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 ```
 
-#### Inspecting Our Compiled Model
+### Inspecting Our Compiled Model
 
 Before we train our model, let's take a look at what it looks like, and see how many trainable parameters it has. In the cell below, call our model's `.summary()` method to inspect it. 
 
@@ -190,11 +190,11 @@ lstm_model.summary()
     Trainable params: 2,599,370
     Non-trainable params: 0
     _________________________________________________________________
-    
+
 
 Just under 2.6 million trainable parameters--that's a pretty decent-sized model!
 
-#### Training Our Model
+### Training Our Model
 
 Now that we have preprocessed our data, created our model, and compiled it, we're ready for the moment of truth--training!
 
@@ -218,7 +218,7 @@ lstm_model.fit(X_t, labels, epochs=2, batch_size=32, validation_split=0.1)
     10182/10182 [==============================] - 52s 5ms/step - loss: 2.9184 - acc: 0.0855 - val_loss: 2.5967 - val_acc: 0.1749
     Epoch 2/2
     10182/10182 [==============================] - 50s 5ms/step - loss: 2.2823 - acc: 0.2511 - val_loss: 1.7920 - val_acc: 0.5141
-    
+
 
 
 
@@ -227,7 +227,7 @@ lstm_model.fit(X_t, labels, epochs=2, batch_size=32, validation_split=0.1)
 
 
 
-### Building Our GRU Model
+## Building Our GRU Model
 
 Now that we have a benchmark for how an LSTM model performs, let's build the exact same model, but with `GRU()` cells instead of `LSTM()` cells!
 
@@ -282,7 +282,7 @@ gru_model.summary()
     Trainable params: 2,590,420
     Non-trainable params: 0
     _________________________________________________________________
-    
+
 
 Finally, train our GRU model using the same parameters as we did for our LSTM model.
 
@@ -296,7 +296,7 @@ gru_model.fit(X_t, labels, epochs=2, batch_size=32, validation_split=0.1)
     10182/10182 [==============================] - 41s 4ms/step - loss: 2.9062 - acc: 0.1079 - val_loss: 2.5377 - val_acc: 0.3207
     Epoch 2/2
     10182/10182 [==============================] - 40s 4ms/step - loss: 2.2111 - acc: 0.3149 - val_loss: 1.7253 - val_acc: 0.5256
-    
+
 
 
 
@@ -307,6 +307,6 @@ gru_model.fit(X_t, labels, epochs=2, batch_size=32, validation_split=0.1)
 
 There we have it! In this particular case, GRUs strongly outperformed LSTMs in the first epoch, but the gap quickly leveled out between them by the end of epoch 2. When comparing LSTMs and GRUs for a given task, this isn't always the case--there are certainly times where LSTMs will outperform GRUs. However, overall, GRUs seem to have a slight advantage over LSTMs. The interesting thing about this is that researchers don't yet know _why_ GRUs tend to slightly outperform LSTMs, especially when GRU cells are a bit simpler than LSTM cells. This is an ongoing area of cutting-edge research in the field of Deep Learning--maybe someday, you'll be the one to solve this mystery!
 
-# Summary
+## Summary
 
 In this lesson, we created and trained comparable LSTM and GRU models for text classification, and compared their performance and runtimes against one another!
